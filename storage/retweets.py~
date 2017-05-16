@@ -1,0 +1,10 @@
+class Retweet:
+    __table__ = "twitter_db"
+    user_id = Column(String(128), nullable=True)
+    user_id = Column(String(250), nullable=True)
+    user_email = Column(String(250), nullable=True)
+    keyword = Column(String(250), nullable=True)
+    tweet_id = Column(String(250), nullable=True)
+    screen_name = Column(String(128), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=datetime.now(), nullable=False)
+    text text,
