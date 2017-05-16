@@ -14,25 +14,20 @@ app = Flask(__name__)
 
 CONSUMER_KEY = __import__('api-token').CONSUMER_KEY
 CONSUMER_SECRET = __import__('api-token').CONSUMER_SECRET
-CALLBACK_URL = 'http://127.0.0.1:5000/verify'
+CALLBACK_URL = 'http://0.0.0.0:5000/verify'
 session = {}
 db = {}
 
 @app.route("/")
 def send_token():
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET, CALLBACK_URL)
-    try:
-        # get the request tokens
-        redirect_url = auth.get_authorization_url()
-        session['request_token'] = auth.request_token
-    except tweepy.TweepError:
-        print('Error! Failed to get request token')
-        # return flask.redirect(redirect_url)
-        return None
+    redirect_url = auth.get_authorization_url()
+    session['request_token'] = auth.request_token
+    return flask.redirect(redirect_url)
 
 @app.route("/verify")
 def get_verification():
-    #get the verifier key from the request url
+    # get the verifier key from the request url
     verifier = request.GET.get['oauth_verifier']
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     
