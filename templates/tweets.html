@@ -5,7 +5,12 @@
     <link rel="stylesheet" href="../static/style.css" type="text/css">
   </head>
   <body>
-    <h1>OAuth Worked! yay</h1>
+    <h1>OAuth Worked!</h1>
+    <input id="activate" type="submit" value="Activate" style="float: right" />
+    <div style="overflow: hidden; padding-right: .5em;">
+      <input id="keyword" type="text" placeholder="Keyword" style="width: 100%;" />
+    </div>
+    <input id= "deactivate" type="submit"value="Deactivate" style="float: right" />
     <div id="tweets">
       {% for t in tweets %}
       <div id='tweet'>{{ t.text }}</div>
