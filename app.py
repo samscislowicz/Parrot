@@ -12,11 +12,11 @@ import flask
 import tweepy
 app = Flask(__name__)
 
-CONSUMER_KEY = 'Qpm9g92Rm61ZDblY5wKvWCXnn'
-CONSUMER_SECRET = 'parIwRKtMTNrN5qX5uMkTfiQ6yfW7tiwzPxtfi5a256r6tiB83'
+CONSUMER_KEY = __import__('api-token').CONSUMER_KEY
+CONSUMER_SECRET = __import__('api-token').CONSUMER_SECRET
 CALLBACK_URL = 'http://127.0.0.1:5000/verify'
 session = {}
-db = {} #you can save these values to a database
+db = {}
 
 @app.route("/")
 def send_token():
@@ -27,8 +27,8 @@ def send_token():
         session['request_token'] = auth.request_token
     except tweepy.TweepError:
         print('Error! Failed to get request token')
-        #this is twitter's url for authentication
-#        return flask.redirect(redirect_url)
+        # return flask.redirect(redirect_url)
+        return None
 
 @app.route("/verify")
 def get_verification():
@@ -60,4 +60,4 @@ def start():
     return flask.render_template('tweets.html', tweets=api.user_timeline())
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port="5000")
