@@ -4,6 +4,8 @@ USE twitter_db;
 CREATE TABLE IF NOT EXISTS retweets (
 id int(11) NOT NULL AUTO_INCREMENT,
 user_id varchar(250)    DEFAULT    NULL,
+user_email varchar(250)    DEFAULT    NULL,
+keyword varchar(250)    DEFAULT    NULL,
 tweet_id varchar(250)    DEFAULT    NULL,
 screen_name varchar(128) DEFAULT NULL,
 created_at timestamp NULL DEFAULT NULL,
