@@ -7,7 +7,7 @@ body{
 
 #landingPage {
     position: relative;
-    background-image: url(../images/background_page1.jpg);
+    background-image: url(../static/images/background_page1.jpg);
     background-position: center center;
     background-size: cover;
     width: 100%;
