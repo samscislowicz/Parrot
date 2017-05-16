@@ -28,7 +28,7 @@ def send_token():
 @app.route("/verify")
 def get_verification():
     # get the verifier key from the request url
-    verifier = request.args.get['oauth_verifier']
+    verifier = request.args.get('oauth_verifier')
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     
     request_token = session.get('request_token')
