@@ -54,5 +54,20 @@ def start():
     # example, print your latest status posts
     return flask.render_template('tweets.html', tweets=api.user_timeline())
 
+@app.route("/activate")
+def activate():
+    #create a cron job only if a user does not have one already
+    api = db['api']
+    user_id = api.id
+    cron = CronTab(user=True)
+    user_jobs = cron.find_comment(user_id)
+    if user_jobs:
+        return
+    job  = cron.new(command='/Parrot/twitterbot.py {} {} {}'.format(
+        db['access_token_key'], db['access_token_secret'], keyword),
+                    comment = user_id)
+    job.minute.on(5)
+    cron.write()
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
