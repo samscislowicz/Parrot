@@ -21,10 +21,6 @@ session = {}
 db = {}
 
 @app.route("/")
-def landing_page():
-    return flask.render_template('index.html')
-
-@app.route("/login")
 def send_token():
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET, CALLBACK_URL)
     redirect_url = auth.get_authorization_url()
@@ -36,11 +32,9 @@ def get_verification():
     # get the verifier key from the request url
     verifier = request.args.get('oauth_verifier')
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-
     request_token = session.get('request_token')
     del session['request_token']
     auth.request_token = request_token
-
     try:
         auth.get_access_token(verifier)
     except tweepy.TweepError:
@@ -62,16 +56,15 @@ def start():
 
 @app.route("/start/<keyword>")
 def activate(keyword):
-    #create a cron job only if a user does not have one already
+    # create a cron job only if a user does not have one already
     api = db['api']
     user_id = api.me()._json['id_str']
-    print(user_id)
     cron = CronTab(user=True)
     user_jobs = list(cron.find_comment(user_id))
-    print(user_jobs)
-    if user_jobs == []:
+    if user_jobs != []:
+        print("ALREADY HAS CRON JOB")
         return flask.render_template('tweets.html', tweets=api.user_timeline())
-    job  = cron.new(command='/Parrot/twitterbot.py {} {} {}'.format(
+    job = cron.new(command='~/Parrot/twitterbot.py {} {} {}'.format(
         db['access_token_key'], db['access_token_secret'], keyword),
                     comment = user_id)
     job.minute.on(5)
