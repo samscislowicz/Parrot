@@ -19,6 +19,10 @@ session = {}
 db = {}
 
 @app.route("/")
+def landing_page():
+    return flask.render_template('index.html')
+
+@app.route("/login")
 def send_token():
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET, CALLBACK_URL)
     redirect_url = auth.get_authorization_url()
@@ -30,7 +34,7 @@ def get_verification():
     # get the verifier key from the request url
     verifier = request.args.get('oauth_verifier')
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-    
+
     request_token = session.get('request_token')
     del session['request_token']
     auth.request_token = request_token
