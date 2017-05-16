@@ -8,6 +8,8 @@ derived from the following code: https://github.com/whichlight/flask-tweepy-oaut
 
 from flask import Flask
 from flask import request
+from crontab import CronTab
+import json
 import flask
 import tweepy
 app = Flask(__name__)
@@ -54,20 +56,23 @@ def start():
     # example, print your latest status posts
     return flask.render_template('tweets.html', tweets=api.user_timeline())
 
-@app.route("/activate")
-def activate():
+@app.route("/start/<keyword>")
+def activate(keyword):
     #create a cron job only if a user does not have one already
     api = db['api']
-    user_id = api.id
+    user_id = api.me()._json['id_str']
+    print(user_id)
     cron = CronTab(user=True)
-    user_jobs = cron.find_comment(user_id)
-    if user_jobs:
-        return
+    user_jobs = list(cron.find_comment(user_id))
+    print(user_jobs)
+    if user_jobs == []:
+        return flask.render_template('tweets.html', tweets=api.user_timeline())
     job  = cron.new(command='/Parrot/twitterbot.py {} {} {}'.format(
         db['access_token_key'], db['access_token_secret'], keyword),
                     comment = user_id)
     job.minute.on(5)
     cron.write()
+    return flask.render_template('tweets.html', tweets=api.user_timeline())
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
