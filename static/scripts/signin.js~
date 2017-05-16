@@ -1,0 +1,5 @@
+window.onload = function() {
+    $('button').click(function() {
+	window.location.href = '0.0.0.0/login';
+    });
+}
