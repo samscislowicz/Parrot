@@ -12,7 +12,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from retweets import Base, Retweet
 
 USER = 'root'
-PWD = ''
+PWD = 'root'
 DB = 'twitter_db'
 
 class Tweet_db:
@@ -27,7 +27,7 @@ class Tweet_db:
         self.session = scoped_session(sessionmaker(bind=self.engine,
                                                      expire_on_commit=False))
 
-    def add_retweet(self, user_id, retweet):
+    def add_retweet(self, user, retweet):
         """
         arguements:
 
@@ -35,7 +35,16 @@ class Tweet_db:
         retweet: the retweet obj
         """
         # insert retweet using mysqlalchmeny
-        pass
+        retweet = Retweet()
+        retweet.user_id=user._json['id_str']
+        retweet.user_email=user.email
+        retweet.keyword=retweet.keyword
+        retweet.tweet_id=retweet.tweet_id
+        retweet.screen_name=retweet.screen_name
+        retweet.text=retweet.text
+
+        self.session.add(retweet)
+        self.session.commit()
 
 
     def check_retweet(self, retweet_id):
@@ -43,11 +52,15 @@ class Tweet_db:
         arguements:
 
         retweet_id: id of the retweet
-        returns 1 if retweet if found, 0 other wise
+        returns True if retweet if found, False other wise
         """
         print("enter the function")
         session = self.session
-        return session.query(Retweet).all();
+        q = session.query(Retweet).filter(Retweet.tweet_id=retweet_id).all()
+        if len(q) >= 1:
+            return True
+        else:
+            return False
 
 
     def get_retweets(self, user_id):
