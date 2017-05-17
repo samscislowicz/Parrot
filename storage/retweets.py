@@ -2,7 +2,7 @@ from datetime import datetime
 import uuid
 from sqlalchemy import Column, Integer, String, Table, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
-import uuid
+xoimport uuid
 
 
 Base = declarative_base()
